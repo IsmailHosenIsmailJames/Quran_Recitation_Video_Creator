@@ -2,18 +2,21 @@ import requests
 import json
 import os
 
-listOfAyah = []
-
 with open("recitation_info.json", "r") as f:
     data = json.load(f)
     listOfAyah = data["ayahCount"]
 
 surahToDownload = int(input("Enter the surah number: "))
+ayahLimit = int(input("O for All. Enter the ayah limit: "))
+ayahNumber = listOfAyah[surahToDownload - 1]
+
+if ayahLimit == 0: ayahLimit = ayahNumber
+elif ayahLimit > ayahNumber:
+    print(f"Ayah limit exceeded. Using {ayahNumber} ayahs")
+    ayahLimit = ayahNumber
 reciterId = input("Enter the reciter id: ")
 
 reciterSubFolder = data["recitation"][reciterId]["subfolder"]
-
-ayahNumber = listOfAyah[surahToDownload - 1]
 
 # check if the folder exists
 if not os.path.exists(reciterSubFolder):
@@ -29,10 +32,10 @@ else:
         print("All recitation already downloaded")
         exit()
 
-for i in range(ayahNumber):
+for i in range(ayahLimit):
     ayahId = str(surahToDownload).zfill(3) + str(i + 1).zfill(3)
     fullDownloadURL = "https://everyayah.com/data/" + reciterSubFolder + "/" + ayahId + ".mp3"
-    if (os.path.exists(reciterSubFolder + "/" + ayahId + ".mp3")):
+    if os.path.exists(reciterSubFolder + "/" + ayahId + ".mp3"):
         print("Skipped as already downloaded : " + fullDownloadURL)
         continue
     print("Downloading : " + fullDownloadURL)

@@ -1,2 +1,8 @@
 *.mp3
 *.webm
+quran_translations/
+docs/
+*.mp4
+*.jpg
+*.png
+*.ttf
