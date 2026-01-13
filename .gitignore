@@ -6,3 +6,4 @@ docs/
 *.jpg
 *.png
 *.ttf
+/execution_log.txt
