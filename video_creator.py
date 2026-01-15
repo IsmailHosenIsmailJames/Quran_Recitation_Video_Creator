@@ -24,9 +24,9 @@ class Logger(object):
 
 
 def get_quran_data(
-        audio_folder,
-        translation_path,
-        script_path="indopak_script/indopak-nastaleeq.json"
+    audio_folder,
+    translation_path,
+    script_path="indopak_script/indopak-nastaleeq.json"
 ) -> dict[str, list[str]]:
     """
     Returns a dictionary containing audio files, Quran scripts, and translations.
@@ -68,13 +68,15 @@ def get_quran_data(
 
     return {
         "audio_files":
-            [os.path.join(audio_folder, f) for f in list_of_audio_files],
+        [os.path.join(audio_folder, f) for f in list_of_audio_files],
         "quran_script": list_of_quran_ayah_text,
         "translations": list_of_quran_ayah_translation_text
     }
 
 
-def cropped_and_resized_background_image(img_path, expected_width=1920, expected_height=1080):
+def cropped_and_resized_background_image(img_path,
+                                         expected_width=1920,
+                                         expected_height=1080):
     img = ImageClip(img_path)
 
     # 1. Calculate ratios
@@ -96,7 +98,9 @@ def cropped_and_resized_background_image(img_path, expected_width=1920, expected
     return img.resized(width=expected_width)
 
 
-def add_bottom_shadow(bg_clip: ImageClip, darkness=0.7, shadow_height=0.5) -> CompositeVideoClip:
+def add_bottom_shadow(bg_clip: ImageClip,
+                      darkness=0.7,
+                      shadow_height=0.5) -> CompositeVideoClip:
     """
     Adds a gradient shadow to the bottom of the image.
 
@@ -128,7 +132,9 @@ def add_bottom_shadow(bg_clip: ImageClip, darkness=0.7, shadow_height=0.5) -> Co
 
     # 5. Create the Shadow Overlay
     # Create a black clip covering the whole screen
-    shadow_layer = ColorClip(size=(w, h), color=(0, 0, 0), duration=bg_clip.duration)
+    shadow_layer = ColorClip(size=(w, h),
+                             color=(0, 0, 0),
+                             duration=bg_clip.duration)
 
     # Create a mask Clip from our numpy array
     # is_mask=True tells MoviePy this is a grayscale alpha mask
@@ -150,8 +156,8 @@ def create_video(
         translations: list[str],
         translation_font: str,
         backgroundImg: str,
-        height: int = 1920,
-        width: int = 1080,
+        height: int = 1080,
+        width: int = 1920,
         outputPath="video.mp4",
         bottom_margin: float = 0.1  # 0.1 = 10% up from the bottom
 ) -> None:
@@ -160,7 +166,9 @@ def create_video(
     finalAudioClip = concatenate_audioclips(listOfAudioClips)
 
     # 2. Prepare Background
-    bgImage = cropped_and_resized_background_image(img_path=backgroundImg, expected_width=width, expected_height=height)
+    bgImage = cropped_and_resized_background_image(img_path=backgroundImg,
+                                                   expected_width=width,
+                                                   expected_height=height)
     bgImage = bgImage.with_duration(finalAudioClip.duration)
     # Apply shadow so text pops
     bgImage = add_bottom_shadow(bgImage, darkness=0.8, shadow_height=0.6)
@@ -191,19 +199,19 @@ def create_video(
             text_align="center",
             color="white",
             method='caption',  # Wraps text
-            size=(int(text_box_width), None)
-        ).with_duration(duration).with_start(current_start_time)
+            size=(int(text_box_width),
+                  None)).with_duration(duration).with_start(current_start_time)
 
         # --- B. Create Quran Clip (Top Text) ---
         quran_clip = TextClip(
-            text=quran_script[index],
+            text=quran_script[index] + "\n ",  # Padding for descenders
             font_size=55,  # Quran usually needs to be slightly larger
             font=quran_font,
             text_align="center",
             color="white",
             method='caption',
-            size=(int(text_box_width), None)
-        ).with_duration(duration).with_start(current_start_time)
+            size=(int(text_box_width),
+                  None)).with_duration(duration).with_start(current_start_time)
 
         # --- C. Calculate Positions (Stacking Upwards) ---
         # 1. Place Translation first (Bottom element)
@@ -225,12 +233,16 @@ def create_video(
         current_start_time += duration
 
     # 5. Composite and Render
-    final_video = CompositeVideoClip([bgImage] + all_text_clips, size=(width, height))
+    final_video = CompositeVideoClip([bgImage] + all_text_clips,
+                                     size=(width, height))
 
-    final_video.preview()
+    # final_video.preview(fps=5)
 
     # Write to file
-    # final_video.write_videofile(outputPath, fps=24, codec="libx264", audio_codec="aac")
+    final_video.write_videofile(outputPath,
+                                fps=24,
+                                codec="libx264",
+                                audio_codec="aac")
 
 
 if __name__ == "__main__":
@@ -238,20 +250,22 @@ if __name__ == "__main__":
     sys.stdout = Logger()
     sys.stderr = sys.stdout
 
-    audioPath = "Abdul_Basit_Mujawwad_128kbps"  ## input("Target Folder Path of Audio: ")
+    audioPath = "Abdul_Basit_Murattal_192kbps"  ## input("Target Folder Path of Audio: ")
     translationPath = "quran_translations/bn-taisirul-quran-simple.json"  ## input("Target Folder Path of Translation: ")
 
     try:
         data = get_quran_data(audioPath, translationPath)
         print(f"Successfully loaded {len(data['audio_files'])} ayahs.")
 
-        create_video(audio_files=data["audio_files"],
-                     translations=data["translations"],
-                     translation_font="fonts/Li Alinur Nakkhatra Unicode.ttf",
-                     quran_script=data["quran_script"],
-                     quran_font="indopak_script/Indopak Nastaleeq font.ttf",
-                     outputPath="output_quran_recitation.mp4",
-                     backgroundImg="default_background_images/preparation-ramadan-tradition.jpg")
+        create_video(
+            audio_files=data["audio_files"],
+            translations=data["translations"],
+            translation_font="fonts/Li Alinur Nakkhatra Unicode.ttf",
+            quran_script=data["quran_script"],
+            quran_font="indopak_script/Indopak Nastaleeq font.ttf",
+            outputPath="output_quran_recitation.mp4",
+            backgroundImg=
+            "default_background_images/preparation-ramadan-tradition.jpg")
 
     except Exception:
         traceback.print_exc()
