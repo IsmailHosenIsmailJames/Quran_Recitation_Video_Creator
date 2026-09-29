@@ -1,0 +1,93 @@
+@font-face {
+  font-family: 'surah-name';
+  src: url('/fonts/surah-name-v1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'KFGQPC Hafs';
+  src: url('/fonts/QPC-Hafs.ttf') format('truetype'),
+       url('/fonts/KFGQPC-Hafs.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'QPC Hafs';
+  src: url('/fonts/QPC-Hafs.ttf') format('truetype'),
+       url('/fonts/KFGQPC-Hafs.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Indopak Nastaleeq';
+  src: url('/fonts/AlQuranNeov5x1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'AlQuran Neo';
+  src: url('/fonts/AlQuranNeov5x1.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Li Alinur Nakkhatra';
+  src: url('/fonts/Li-Alinur-Nakkhatra.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Amiri';
+  src: url('/fonts/Amiri-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Al Qalam';
+  src: url('/fonts/Al-Qalam.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Lateef';
+  src: url('/fonts/Lateef-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
+/* Quranic Script Typography Classes */
+.quran-arabic-text {
+  direction: rtl;
+  unicode-bidi: isolate;
+  letter-spacing: 0 !important;
+  word-spacing: normal !important;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "liga" 1, "mset" 1, "mark" 1, "mkmk" 1, "curs" 1;
+}
+
+.bengali-translation-text {
+  direction: ltr;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "liga" 1;
+}
+
